@@ -29,8 +29,8 @@ module.exports = async function () {
     try {
       expires = token.modified.getTime() + (token.value.expires_in * 1000)
     } catch (e) {
-      console.log(`could not determine expiration of token named "${token.name}": ${e.message}`)
-      console.log(`assuming token named "${token.name}" is expired and renewing it now...`)
+      // console.log(`could not determine expiration of token named "${token.name}": ${e.message}`)
+      console.log(`could not determine expiration of token named "${token.name}". Assuming it is expired and renewing it now...`)
       expires = 0
     }
     // renew tokens that expire in 10 minutes or less

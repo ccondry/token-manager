@@ -1,10 +1,9 @@
 const fetch = require('./fetch')
-const package = require('../../package.json')
-const os = require('os')
+const environment = require('./environment')
 const globals = require('./globals')
 
 // find env hostname
-const hostname = os.hostname()
+const hostname = environment.hostname
 
 // trim message to 7439 bytes for Webex to accept it
 function trimMessage (message) {
@@ -63,9 +62,9 @@ async function log () {
 
   // define text prefix for this service
   // const packageName = process.env.npm_package_name
-  const packageName = package.name
+  const packageName = environment.name
   // const packageVersion = process.env.npm_package_version
-  const packageVersion = package.version
+  const packageVersion = environment.version
   const textPrefix = `${packageName} ${packageVersion} on ${hostname}: `
   const markdownPrefix = `**${packageName} ${packageVersion}** on **${hostname}**: `
   // add prefix to plaintext

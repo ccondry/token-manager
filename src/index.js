@@ -6,8 +6,8 @@ const main = require('./main')
 const environment = require('./models/environment')
 const teamsLogger = require('./models/teams-logger')
 
-// check tokens every 10 minutes
-const throttle = 1000 * 60 * 10
+// check tokens every 1 minute
+const throttle = 1000 * 60 * 1
 
 // run now
 main()

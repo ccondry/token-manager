@@ -2,6 +2,11 @@ const db = require('./models/db')
 const webex = require('./models/webex')
 const teamsLogger = require('./models/teams-logger')
 
+const issuers = [
+  'webexV3',
+  'webexV4'
+]
+
 module.exports = async function () {
   let tokens
   try {

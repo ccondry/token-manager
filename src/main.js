@@ -28,8 +28,8 @@ module.exports = async function () {
       console.log(`assuming token named "${token.name}" is expired and renewing it now...`)
       expires = 0
     }
-    // renew tokens that expire in 2 hours or less
-    const threshold = 1000 * 60 * 60 * 2
+    // renew tokens that expire in 10 minutes or less
+    const threshold = 1000 * 60 * 10
     if (now + threshold > expires) {
       // renew
       if (token.iss === 'webexV4') {

@@ -47,10 +47,11 @@ module.exports = async function (url, options = {}) {
     } else {
       // HTTP status not 200 - 299
       let message = text || ''
+      // console.log('bad http:', message)
       try {
         const json = JSON.parse(text)
         // message = json.message
-        message = json.error_description || json.error || ''
+        message = json.error_description || json.error || json.message || text || ''
       } catch (e) {
         // continue
       }

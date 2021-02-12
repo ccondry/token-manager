@@ -49,14 +49,7 @@ module.exports = async function () {
           successCount++
         } catch (e) {
           // refresh token REST failed
-          // console.log('failed to renew token', token, e.message)
-          let message
-          if (e.status === 401) {
-            // call for help - this must be manually fixed
-            message = `failed to refresh OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
-          } else {
-            message = `failed to refresh OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
-          }
+          const message = `failed to refresh OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
           console.log(message)
           teamsLogger.log(message)
           // continue for loop to next token

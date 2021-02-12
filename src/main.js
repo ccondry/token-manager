@@ -7,7 +7,7 @@ module.exports = async function () {
   try {
     // get oauth2 tokens
     tokens = await db.find('toolbox', 'globals', {type: 'OAUTH2'})
-    console.log('found', tokens.length, 'OAUTH2 tokens')
+    // console.log('found', tokens.length, 'OAUTH2 tokens')
   } catch (e) {
     console.log('could not get OAUTH2 tokens from database:', e.message)
     // stop now, hopefully things improve on the next interval

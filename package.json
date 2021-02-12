@@ -1,0 +1,17 @@
+{
+  "name": "token-manager",
+  "version": "1.0.0",
+  "description": "OAUTH2 token manager for dCloud Collaboration Toolbox",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src"
+  },
+  "repository": "https://github.com/ccondry/token-manager.git",
+  "author": "Coty Condry <ccondry@cisco.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@ccondry/mongo-wrapper": "^2020.10.21",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.1"
+  }
+}

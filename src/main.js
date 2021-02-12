@@ -1,0 +1,83 @@
+const db = require('./models/db')
+const webex = require('./models/webex')
+const teamsLogger = require('./models/teams-logger')
+
+module.exports = async function () {
+  let tokens
+  try {
+    // get oauth2 tokens
+    tokens = await db.find('toolbox', 'globals', {type: 'OAUTH2'})
+    console.log('found', tokens.length, 'OAUTH2 tokens')
+  } catch (e) {
+    console.log('could not get OAUTH2 tokens from database:', e.message)
+    // stop now, hopefully things improve on the next interval
+    return
+  }
+  // check each token expiration
+  for (const token of tokens) {
+    // time now, in ms
+    const now = new Date().getTime()
+    // calculate token expiration time, in ms
+    let expires
+    try {
+      expires = token.modified.getTime() + (token.value.expires_in * 1000)
+    } catch (e) {
+      console.log(`could not determine expiration of token named "${token.name}": ${e.message}`)
+      console.log(`assuming token named "${token.name}" is expired and renewing it now...`)
+      expires = 0
+    }
+    // renew tokens that expire in 2 hours or less
+    const threshold = 1000 * 60 * 60 * 2
+    if (now + threshold > expires) {
+      // renew
+      if (token.iss === 'webexV4') {
+        // webex issuer
+        let newToken
+        try {
+          // refresh token
+          newToken = await webex.v4.refresh(token.value)
+        } catch (e) {
+          // refresh token REST failed
+          // console.log('failed to renew token', token, e.message)
+          let message
+          if (e.status === 401) {
+            // call for help - this must be manually fixed
+            message = `failed to refresh OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
+          } else {
+            message = `failed to refresh OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
+          }
+          console.log(message)
+          teamsLogger.log(message)
+          // continue for loop to next token
+          continue
+        }
+        // update token value and modified time in database
+        const updates = {
+          $set: {
+            value: newToken
+          },
+          $currentDate: {
+            modified: { $type: 'date' }
+          }
+        }
+        try {
+          await db.updateOne('toolbox', 'globals', {_id: db.ObjectID(token._id)}, updates)
+        } catch (e) {
+          const message = `failed to update database with OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
+          console.log(message)
+          teamsLogger.log(message)
+        }
+      } else {
+        // unknown issuer
+        const message = `not renewing OAUTH2 token named "${token.name}" with unrecognized issuer "${token.iss}"`
+        console.log(message)
+        // continue for loop to next token
+        continue
+      }
+    } else {
+      // token doesn't need to be renewed yet
+      // continue for loop to next token
+      continue
+    }
+  }
+}

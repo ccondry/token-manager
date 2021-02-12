@@ -13,6 +13,8 @@ module.exports = async function () {
     // stop now, hopefully things improve on the next interval
     return
   }
+  // count of successfully refreshed tokens
+  let successCount = 0
   // check each token expiration
   for (const token of tokens) {
     // time now, in ms
@@ -36,6 +38,7 @@ module.exports = async function () {
         try {
           // refresh token
           newToken = await webex.v4.refresh(token.value)
+          successCount++
         } catch (e) {
           // refresh token REST failed
           // console.log('failed to renew token', token, e.message)
@@ -79,5 +82,9 @@ module.exports = async function () {
       // continue for loop to next token
       continue
     }
+  }
+  // for loop done
+  if (successCount > 0) {
+    console.log('successfully updated', successCount, 'OAUTH2 tokens.')
   }
 }

@@ -32,12 +32,15 @@ module.exports = async function () {
     const threshold = 1000 * 60 * 10
     if (now + threshold > expires) {
       // renew
-      if (token.iss === 'webexV4') {
-        // webex issuer
+      if (issuers.includes(token.iss)) {
+        // valid issuer
         let newToken
         try {
-          // refresh token
-          newToken = await webex.v4.refresh(token.value)
+          // refresh token with proper issuer method
+          switch (token.iss) {
+            case 'webexV4': newToken = await webex.v4.refresh(token.value); break
+            case 'webexV3': newToken = await webex.v3.refresh(token.value); break
+          }
           successCount++
         } catch (e) {
           // refresh token REST failed

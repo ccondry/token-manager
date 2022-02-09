@@ -43,6 +43,7 @@ module.exports = async function () {
         try {
           // refresh token with proper issuer method
           switch (token.iss) {
+            case 'webexV6': newToken = await webex.v6.refresh(token.value); break
             case 'webexV4': newToken = await webex.v4.refresh(token.value); break
             // case 'webexV3': newToken = await webex.v3.refresh(token.value); break
           }

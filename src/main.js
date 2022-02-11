@@ -3,8 +3,8 @@ const webex = require('./models/webex')
 const teamsLogger = require('./models/teams-logger')
 
 const issuers = [
-  'webexV3',
-  'webexV4'
+  'webexV4',
+  'webexV6'
 ]
 
 module.exports = async function () {

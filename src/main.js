@@ -52,7 +52,7 @@ module.exports = async function () {
           // refresh token REST failed
           const message = `failed to refresh OAUTH2 token named "${token.name}" with issuer "${token.iss}": ${e.message}`
           console.log(message)
-          teamsLogger.log(message)
+          // teamsLogger.log(message)
           // continue for loop to next token
           continue
         }

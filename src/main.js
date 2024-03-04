@@ -4,7 +4,8 @@ const teamsLogger = require('./models/teams-logger')
 
 const issuers = [
   'webexV4',
-  'webexV6'
+  'webexV6',
+  'webexJds'
 ]
 
 module.exports = async function () {
@@ -43,6 +44,7 @@ module.exports = async function () {
         try {
           // refresh token with proper issuer method
           switch (token.iss) {
+            case 'webexJds': newToken = await webex.jds.refresh(token.value); break
             case 'webexV6': newToken = await webex.v6.refresh(token.value); break
             case 'webexV4': newToken = await webex.v4.refresh(token.value); break
             // case 'webexV3': newToken = await webex.v3.refresh(token.value); break

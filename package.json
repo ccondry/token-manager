@@ -1,6 +1,6 @@
 {
   "name": "token-manager",
-  "version": "2023.1.21",
+  "version": "2024.3.4",
   "description": "OAUTH2 token manager for dCloud Collaboration Toolbox",
   "main": "src/index.js",
   "scripts": {
